@@ -2,18 +2,39 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
 // ! Hardcoded for MVP
-const QUESTIONS = ['"question-1"', '"question-2"', '"question-3"'];
+const QUESTIONS = [
+  '"test-question-1"',
+  '"something-question-2"',
+  '"else-question-3"',
+];
 const ANSWERS = {
-  'question-1': ['"yes"', '"no"'],
-  'question-2': ['"1"', '"2"', '"3"'],
-  'question-3': ['"maybe?"'],
+  'test-question-1': ['"yes"', '"no"'],
+  'something-question-2': ['"1"', '"2"', '"3"'],
+  'else-question-3': ['"maybe?"'],
 };
 const COMPARATORS = ['==', '!=', '&&', '!='];
 
 export default class SuggestionsComponent extends Component {
+  slug;
+
+  get filteredQuestions() {
+    // regex (?!.*")+(.+)
+    // console.log('🦠 this.args.jexlExpression:', this.args.jexlExpression);
+    const matches = this.args.jexlExpression.match(/(?!.*")+(.+)/g);
+    if (matches) {
+      this.slug = matches[0];
+    }
+
+    if (!this.slug) {
+      return QUESTIONS;
+    }
+    return QUESTIONS.filter((question) => question.includes(this.slug));
+  }
+
   get suggestions() {
+    console.log('🦠 this.args.ast:', this.args.ast);
     if (!this.args.ast) {
-      return [...QUESTIONS];
+      return this.filteredQuestions;
     }
 
     const lastOperationIsAComparator = COMPARATORS.includes(
@@ -22,12 +43,21 @@ export default class SuggestionsComponent extends Component {
     if (lastOperationIsAComparator) {
       return this.fetchPossibleAnswers();
     }
+    console.log('🔫', 'up to here');
 
     if (this.args.ast.type === 'BinaryExpression') {
+      if (this.args.ast.right.type === 'Literal') {
+        // return [this.filteredQuestions, ...COMPARATORS];
+        return COMPARATORS;
+      }
       return COMPARATORS;
     }
     if (this.args.ast.type === 'FunctionCall') {
       return COMPARATORS;
+    }
+
+    if (this.args.ast.type === 'Identifier') {
+      return this.filteredQuestions;
     }
 
     return QUESTIONS;
@@ -60,7 +90,8 @@ export default class SuggestionsComponent extends Component {
   select(suggestion) {
     const jexlToAppend = this.appendAnswerTransformIfRequired(suggestion);
 
-    this.args.onSelection(jexlToAppend);
+    this.args.onSelection(jexlToAppend, this.slug);
+    this.slug = null;
   }
 
   appendAnswerTransformIfRequired(jexlToAppend) {

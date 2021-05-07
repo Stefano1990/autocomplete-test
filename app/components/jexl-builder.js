@@ -26,13 +26,21 @@ export default class JexlBuilderComponent extends Component {
   }
 
   @action
-  evaluateAst() {}
+  evaluateAst() {
+    // jexl.createExpression(this.jexlExpression)._getAst();
+    return this.ast;
+  }
 
   @action
-  suggestionSelected(selection) {
+  suggestionSelected(selection, slug) {
     if (this.jexlExpression === 'null') {
       this.jexlExpression = '';
     }
+    console.log('🦠 slug is:', slug);
+    if (slug && slug !== '') {
+      this.jexlExpression = this.jexlExpression.replace(slug, '');
+    }
+
     this.jexlExpression += ' ' + selection;
     this.evaluateAst();
   }
