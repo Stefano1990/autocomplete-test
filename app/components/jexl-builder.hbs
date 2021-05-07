@@ -1,0 +1,14 @@
+<Textarea
+  @value={{jexlExpression}}
+  {{!-- @key-press={{evaluateAst}} --}}
+  @input={{evaluateAst}}
+  rows=10
+  cols=50
+/>
+
+{{log this.ast}}
+<Suggestions
+  @ast={{this.ast}}
+  @onSelection={{this.suggestionSelected}}
+  @jexlExpression={{jexlExpression}}
+/>

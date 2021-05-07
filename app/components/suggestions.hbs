@@ -1,0 +1,6 @@
+{{log this.parsedAst}}
+<ul>
+  {{#each this.suggestions as |suggestion|}}
+    <li {{on "click" (fn this.select suggestion)}}>{{suggestion}}</li>
+  {{/each}}
+</ul>
