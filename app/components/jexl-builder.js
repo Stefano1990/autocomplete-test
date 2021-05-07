@@ -12,25 +12,21 @@ Object.entries(transforms).map(([key, transform]) => {
 });
 
 export default class JexlBuilderComponent extends Component {
-  @tracked jexlExpression = 'null';
-  @tracked ast = {};
+  @tracked jexlExpression = '';
+  lastSuccessfulAst;
 
-  // get jexlExpression() {
-  //   return '';
-  // }
-
-  @action
-  evaluateAst() {
-    // console.log('🦠 this.jexlExpression:', this.jexlExpression);
+  get ast() {
     try {
       const result = jexl.createExpression(this.jexlExpression)._getAst();
-      this.ast = result;
-      return JSON.stringify(result, null, 2);
+      this.lastSuccessfulAst = result;
+      return result;
     } catch (e) {
-      console.log('🦠 e:', e);
-      return '';
+      return this.lastSuccessfulAst;
     }
   }
+
+  @action
+  evaluateAst() {}
 
   @action
   suggestionSelected(selection) {
@@ -38,5 +34,6 @@ export default class JexlBuilderComponent extends Component {
       this.jexlExpression = '';
     }
     this.jexlExpression += ' ' + selection;
+    this.evaluateAst();
   }
 }

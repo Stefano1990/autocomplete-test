@@ -1,19 +1,20 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 // ! Hardcoded for MVP
 const QUESTIONS = ['"question-1"', '"question-2"', '"question-3"'];
 const ANSWERS = {
-  'question-1': ['yes', 'no'],
-  'question-2': ['1', '2', '3'],
-  'question-3': ['maybe?'],
+  'question-1': ['"yes"', '"no"'],
+  'question-2': ['"1"', '"2"', '"3"'],
+  'question-3': ['"maybe?"'],
 };
 const COMPARATORS = ['==', '!=', '&&', '!='];
 
 export default class SuggestionsComponent extends Component {
   get suggestions() {
-    console.log('🦠 this.ast 1:', this.args.ast);
+    if (!this.args.ast) {
+      return [...QUESTIONS];
+    }
 
     const lastOperationIsAComparator = COMPARATORS.includes(
       this.args.jexlExpression.slice(-2)
@@ -23,7 +24,7 @@ export default class SuggestionsComponent extends Component {
     }
 
     if (this.args.ast.type === 'BinaryExpression') {
-      return [...QUESTIONS, ...COMPARATORS];
+      return COMPARATORS;
     }
     if (this.args.ast.type === 'FunctionCall') {
       return COMPARATORS;
@@ -37,14 +38,22 @@ export default class SuggestionsComponent extends Component {
   };
 
   fetchPossibleAnswers = function () {
-    const regExp = /".*?"/g;
-    let foundQuestions = this.args.jexlExpression.match(regExp);
-    const lastQuestion = foundQuestions[foundQuestions.length];
-    if (lastQuestion) {
-      return ANSWERS[JSON.parse(lastQuestion)];
-    } else {
-      this.fetchQuestions();
+    const ast = this.args.ast;
+
+    if (ast.type === 'FunctionCall') {
+      const lastArg = ast.args[ast.args.length - 1];
+      if (lastArg.type === 'Literal') {
+        return ANSWERS[lastArg.value];
+      }
     }
+
+    if (ast.type === 'BinaryExpression') {
+      if (ast.right.args) {
+        return ANSWERS[ast.right.args[0].value];
+      }
+    }
+
+    return this.fetchQuestions();
   };
 
   @action
