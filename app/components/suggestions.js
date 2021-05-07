@@ -18,11 +18,9 @@ export default class SuggestionsComponent extends Component {
   slug;
 
   get filteredQuestions() {
-    // regex (?!.*")+(.+)
-    // console.log('🦠 this.args.jexlExpression:', this.args.jexlExpression);
-    const matches = this.args.jexlExpression.match(/(?!.*")+(.+)/g);
+    const matches = this.args.jexlExpression.match(/[\w-]+$/g);
     if (matches) {
-      this.slug = matches[0];
+      this.slug = matches[0]; // ! not sure how to do this in ember
     }
 
     if (!this.slug) {
@@ -32,7 +30,6 @@ export default class SuggestionsComponent extends Component {
   }
 
   get suggestions() {
-    console.log('🦠 this.args.ast:', this.args.ast);
     if (!this.args.ast) {
       return this.filteredQuestions;
     }
@@ -43,12 +40,13 @@ export default class SuggestionsComponent extends Component {
     if (lastOperationIsAComparator) {
       return this.fetchPossibleAnswers();
     }
-    console.log('🔫', 'up to here');
 
     if (this.args.ast.type === 'BinaryExpression') {
       if (this.args.ast.right.type === 'Literal') {
-        // return [this.filteredQuestions, ...COMPARATORS];
         return COMPARATORS;
+      }
+      if (this.args.ast.right.type === 'Identifier') {
+        return this.filteredQuestions;
       }
       return COMPARATORS;
     }

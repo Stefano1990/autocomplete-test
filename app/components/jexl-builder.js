@@ -12,13 +12,13 @@ Object.entries(transforms).map(([key, transform]) => {
 });
 
 export default class JexlBuilderComponent extends Component {
-  @tracked jexlExpression = '';
+  @tracked jexlExpression = ''; // ! not sure how to do this
   lastSuccessfulAst;
 
   get ast() {
     try {
       const result = jexl.createExpression(this.jexlExpression)._getAst();
-      this.lastSuccessfulAst = result;
+      this.lastSuccessfulAst = result; // ! not sure how to do this
       return result;
     } catch (e) {
       return this.lastSuccessfulAst;
@@ -36,7 +36,6 @@ export default class JexlBuilderComponent extends Component {
     if (this.jexlExpression === 'null') {
       this.jexlExpression = '';
     }
-    console.log('🦠 slug is:', slug);
     if (slug && slug !== '') {
       this.jexlExpression = this.jexlExpression.replace(slug, '');
     }
