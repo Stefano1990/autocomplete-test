@@ -68,4 +68,9 @@ export default class JexlBuilderComponent extends Component {
     // this.evaluateAst();
     this.focusTextArea();
   }
+
+  @action
+  pickFirstSuggestion() {
+    console.log("🦠 'in here':", 'in here');
+  }
 }
