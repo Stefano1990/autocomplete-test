@@ -27,7 +27,7 @@ export default class JexlBuilderComponent extends Component {
   }
 
   @action
-  evaluateAst() {
+  evaluateAst(event) {
     // jexl.createExpression(this.jexlExpression)._getAst();
     // return this.ast;
     try {
@@ -48,7 +48,7 @@ export default class JexlBuilderComponent extends Component {
     if (slug && slug !== '') {
       this.jexlExpression = this.jexlExpression.replace(slug, '');
     }
-
+    debugger;
     this.jexlExpression += ' ' + selection;
     this.evaluateAst();
   }

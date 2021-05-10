@@ -1,6 +1,8 @@
 {{log this.parsedAst}}
-<ul>
+<h2 class="uk-heading-divider">Suggestions</h2>
+
+<UkList @divider={{true}} as |list|>
   {{#each this.suggestions as |suggestion|}}
-    <li {{on "click" (fn this.select suggestion)}}>{{suggestion}}</li>
+    <list.item {{on "click" (fn this.select suggestion)}}>{{suggestion}}</list.item>
   {{/each}}
-</ul>
+</UkList>
