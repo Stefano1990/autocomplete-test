@@ -15,6 +15,7 @@ export default class JexlBuilderComponent extends Component {
   @tracked jexlExpression = ''; // ! not sure how to do this
   @tracked astIsInvalid = false;
   lastSuccessfulAst;
+  htmlElement;
 
   get ast() {
     try {
@@ -27,7 +28,20 @@ export default class JexlBuilderComponent extends Component {
   }
 
   @action
-  evaluateAst(event) {
+  setElementRef(element) {
+    this.htmlElement = element;
+  }
+
+  focusTextArea() {
+    this.htmlElement.focus();
+    this.htmlElement.setSelectionRange(
+      this.jexlExpression.length,
+      this.jexlExpression.length
+    );
+  }
+
+  @action
+  evaluateAst() {
     // jexl.createExpression(this.jexlExpression)._getAst();
     // return this.ast;
     try {
@@ -36,20 +50,22 @@ export default class JexlBuilderComponent extends Component {
       this.lastSuccessfulAst = result; // ! not sure how to do this
     } catch (e) {
       this.astIsInvalid = true;
-      console.log('🦠 Invalid AST:', e);
     }
   }
 
   @action
   suggestionSelected(selection, slug) {
-    if (this.jexlExpression === 'null') {
-      this.jexlExpression = '';
-    }
     if (slug && slug !== '') {
-      this.jexlExpression = this.jexlExpression.replace(slug, '');
+      // this.jexlExpression = this.jexlExpression.replace(slug, ''); // !TODO Replace last match for this!
+      debugger;
+      this.jexlExpression = this.jexlExpression.replace(
+        new RegExp(slug + '$'),
+        ''
+      ); // !TODO Replace last match for this!
     }
-    debugger;
+
     this.jexlExpression += ' ' + selection;
-    this.evaluateAst();
+    // this.evaluateAst();
+    this.focusTextArea();
   }
 }

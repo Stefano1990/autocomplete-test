@@ -12,7 +12,7 @@ const ANSWERS = {
   'something-question-2': ['"1"', '"2"', '"3"'],
   'else-question-3': ['"maybe?"'],
 };
-const COMPARATORS = ['==', '!=', '&&', '!='];
+const COMPARATORS = ['==', '!=', '&&', '||'];
 
 export default class SuggestionsComponent extends Component {
   slug;

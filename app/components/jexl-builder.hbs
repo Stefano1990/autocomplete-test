@@ -3,7 +3,8 @@
 
   <Textarea
     @value={{this.jexlExpression}}
-    {{ on "input" this.evaluateAst }}
+    {{on "input" this.evaluateAst}}
+    {{did-insert this.setElementRef}}
     rows=10
     cols=50
   />
