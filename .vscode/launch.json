@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome", //Requires the "Debugger for Chrome" vscode extension
+      "request": "attach",
+      "name": "attach", //Can be whatever name you want to give this config
+      "port": 9222, //This needs to be the same port as the remote debugging port that you launch Chrome with
+      "urlFilter": "http://localhost:4200*",
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        //"myappname" is from the environment.js "modulePrefix" property.
+        "myappname/*": "${workspaceFolder}/app/*"
+      }
+    }
+  ]
+}

@@ -13,6 +13,7 @@ Object.entries(transforms).map(([key, transform]) => {
 
 export default class JexlBuilderComponent extends Component {
   @tracked jexlExpression = ''; // ! not sure how to do this
+  @tracked astIsInvalid = false;
   lastSuccessfulAst;
 
   get ast() {
@@ -28,7 +29,15 @@ export default class JexlBuilderComponent extends Component {
   @action
   evaluateAst() {
     // jexl.createExpression(this.jexlExpression)._getAst();
-    return this.ast;
+    // return this.ast;
+    try {
+      const result = jexl.createExpression(this.jexlExpression)._getAst();
+      this.astIsInvalid = false;
+      this.lastSuccessfulAst = result; // ! not sure how to do this
+    } catch (e) {
+      this.astIsInvalid = true;
+      console.log('🦠 Invalid AST:', e);
+    }
   }
 
   @action

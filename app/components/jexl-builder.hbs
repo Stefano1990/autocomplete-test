@@ -1,6 +1,6 @@
 <Textarea
-  @value={{jexlExpression}}
-  @input={{evaluateAst}}
+  @value={{this.jexlExpression}}
+  {{ on "input" this.evaluateAst }}
   rows=10
   cols=50
 />
@@ -8,5 +8,5 @@
 <Suggestions
   @ast={{this.ast}}
   @onSelection={{this.suggestionSelected}}
-  @jexlExpression={{jexlExpression}}
+  @jexlExpression={{this.jexlExpression}}
 />
