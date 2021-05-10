@@ -2,6 +2,8 @@
 
 <UkList @divider={{true}} as |list|>
   {{#each this.suggestions as |suggestion|}}
-    <list.item {{on "click" (fn this.select suggestion)}}>{{suggestion}}</list.item>
+    <list.item {{on "click" (fn this.select suggestion)}} style="cursor: pointer;">
+      {{suggestion}}
+    </list.item>
   {{/each}}
 </UkList>
