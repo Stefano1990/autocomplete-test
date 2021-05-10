@@ -1,12 +1,16 @@
-<Textarea
-  @value={{this.jexlExpression}}
-  {{ on "input" this.evaluateAst }}
-  rows=10
-  cols=50
-/>
+<div class="uk-padding">
+  <JexlAlert @astIsInvalid={{this.astIsInvalid}}/>
 
-<Suggestions
-  @ast={{this.ast}}
-  @onSelection={{this.suggestionSelected}}
-  @jexlExpression={{this.jexlExpression}}
-/>
+  <Textarea
+    @value={{this.jexlExpression}}
+    {{ on "input" this.evaluateAst }}
+    rows=10
+    cols=50
+  />
+
+  <Suggestions
+    @ast={{this.ast}}
+    @onSelection={{this.suggestionSelected}}
+    @jexlExpression={{this.jexlExpression}}
+  />
+</div>
