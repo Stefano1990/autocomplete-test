@@ -3,6 +3,8 @@
   <Textarea
     @value={{this.jexlExpression}}
     {{on "input" this.recomputeAst}}
+    {{did-insert this.setElementRef}}
+    {{key-down this.pickFirstSuggestion key='Tab'}}
     rows=10
     cols=50
   />
