@@ -15,7 +15,8 @@ const ANSWERS = {
   'something-question-2': ['"1"', '"2"', '"3"'],
   'else-question-3': ['"maybe?"'],
 };
-const COMPARATORS = ['==', '!=', '&&', '||'];
+const EQUALITIES = ['==', '!=']
+const COMPARATORS = ['&&', '||'];
 
 const transforms = [
   { answer: (questions) => questions.map((question) => question) },
@@ -61,7 +62,7 @@ export default class JexlBuilderComponent extends Component {
           if(this.lastOperationIsAnAndOrOr) {
             return this.filteredQuestions
           } else {
-            return this.possibleAnswers
+            return COMPARATORS
           }
         }
         if (rightMostAst.type === 'Identifier') {
@@ -97,9 +98,12 @@ export default class JexlBuilderComponent extends Component {
   get lastOperationIsAComparator() {
     return COMPARATORS.includes(this.jexlExpression.slice(-3, -1))
   }
+  get lastOperationIsAnEqualityCheck() {
+    return EQUALITIES.includes(this.jexlExpression.slice(-3, -1))
+  }
 
   get lastOperationIsAnAndOrOr() {
-    const matches = this.jexlExpression.match(/(&&|\|\|)+\w*/g)
+    const matches = this.jexlExpression.match(/(&&|\|\|)\s*$/g)
     return matches !== null
   }
 
@@ -111,7 +115,9 @@ export default class JexlBuilderComponent extends Component {
       if (rightMostAst && rightMostAst.args) {
         questionSlug = rightMostAst.args[0].value
       } else {
-        questionSlug = this.ast.left.args[0].value
+        if (this.ast.left.args) {
+          questionSlug = this.ast.left.args[0].value
+        }
       }
     }
     if (this.ast.type === 'FunctionCall') { // ! this is only the case after the very first transform!
@@ -124,7 +130,7 @@ export default class JexlBuilderComponent extends Component {
   }
 
   filteredAnswers (questionSlug) {
-    if (!this.lastOperationIsAComparator && !this.slug) { return COMPARATORS }
+    if (!this.lastOperationIsAnEqualityCheck && !this.slug) { return EQUALITIES }
     if (!questionSlug) {
       return this.filteredQuestions
     }
