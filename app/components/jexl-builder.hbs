@@ -9,24 +9,8 @@
     cols=50
   />
 
-  {{!-- {{suggestions}} --}}
   <Suggestions
     @suggestions={{this.suggestions}}
     @onSelected={{this.selectSuggestion}}
   />
-  {{!-- <Textarea
-    @value={{this.jexlExpression}}
-    {{on "input" this.recomputeAst}}
-    {{did-insert this.setElementRef}}
-    {{key-down this.pickFirstSuggestion key='Tab'}}
-    rows=10
-    cols=50
-  /> --}}
-
-  {{!-- <Suggestions
-    @ast={{this.ast}}
-    @jexlExpression={{this.jexlExpression}}
-    @onSelection={{this.suggestionSelected}}
-    @onPickFirstSuggestion={{this.pickFirstSuggestion}}
-  /> --}}
 </div>
