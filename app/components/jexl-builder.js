@@ -55,7 +55,6 @@ export default class JexlBuilderComponent extends Component {
   get suggestions () {
     if (!this.ast) { return this.filteredQuestions }
     const rightMostAst = this.getRightMostAst(this.ast)
-    console.log("🦠 this.ast up here:", this.ast)
     switch(this.ast.type) {
       case 'BinaryExpression':
         if (rightMostAst.type === 'Literal') {
