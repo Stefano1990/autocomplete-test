@@ -27,7 +27,7 @@ Object.entries(transforms).map(([key, transform]) => {
 
 export default class JexlBuilderComponent extends Component {
   ast
-  astIsInvalid
+  @tracked astIsValid = true
   @tracked jexlExpression = ''
   ast
   htmlElement

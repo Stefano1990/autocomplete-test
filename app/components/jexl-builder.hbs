@@ -1,5 +1,5 @@
 <div class="uk-padding">
-  <JexlAlert @astIsInvalid={{this.astIsInvalid}}/>
+  <JexlAlert @astIsValid={{this.astIsValid}}/>
   <Textarea
     @value={{this.jexlExpression}}
     {{on "input" this.recomputeAst}}
