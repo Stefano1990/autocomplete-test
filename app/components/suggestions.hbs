@@ -1,8 +1,8 @@
 <h2 class="uk-heading-divider">Suggestions</h2>
 
 <UkList @divider={{true}} as |list|>
-  {{#each this.suggestions as |suggestion|}}
-    <list.item {{on "click" (fn this.select suggestion)}} style="cursor: pointer;">
+  {{#each @suggestions as |suggestion|}}
+    <list.item {{on "click" (fn @onSelected suggestion)}} style="cursor: pointer;">
       {{suggestion}}
     </list.item>
   {{/each}}
